@@ -7,6 +7,14 @@
   "author": "Miguel Uy <yuleugim@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "mongodb": "^2.2.24",
     "restify": "^4.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.16.1"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/eslint index.js",
+    "start": "node index.js"
   }
 }
