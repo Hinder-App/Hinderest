@@ -38,3 +38,6 @@ jspm_packages
 
 # Eslint configuration
 !.eslintrc.yml
+
+# Environment variable configuration
+.env
