@@ -1,17 +1,8 @@
 require('dotenv').load()
 const restify = require('restify')
-const MongoClient = require('mongodb').MongoClient
+const database = require('./src/database/database.js')
 
-var db
-
-MongoClient.connect(process.env.MONGODB_URI, (err, database) => {
-  if (err) {
-    console.log(err)
-    process.exit(1)
-  }
-
-  db = database
-
+database.connect((db) => {
   console.log(`Database ${db.databaseName} connected`)
 
   const server = restify.createServer()
