@@ -51,6 +51,39 @@ passport.deserializeUser((id, done) => {
   })
 })
 
+server.post('/register', (req, res, next) => {
+  let username = req.body.username
+  let password = req.body.password
+  let name = req.body.name
+  let age = req.body.age
+
+  if (!User.findOne({ username: username })) return res.json({
+    status: 'fail',
+    data: {
+      message: 'User already exists'
+    }
+  })
+
+  let user = new User({
+    username: username,
+    password: password,
+    name: name,
+    age: age
+  })
+
+  user.save((err) => {
+    if (err) return console.error(err)
+    return res.json({
+      status: 'success',
+      data: {
+        message: 'User registered'
+      }
+    })
+  })
+
+  next()
+})
+
 server.post('/login', passport.authenticate('local'), (req, res, next) => {
   res.json({
     status: 'success',

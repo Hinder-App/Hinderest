@@ -3,7 +3,9 @@ const Schema = mongoose.Schema
 
 let User = new Schema({
   username: String,
-  password: String
+  password: String,
+  name: String,
+  age: Number
 })
 
 User.methods.verifyPassword = function (password) {
