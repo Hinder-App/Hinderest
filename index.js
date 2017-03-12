@@ -51,6 +51,8 @@ passport.deserializeUser((id, done) => {
   })
 })
 
+server.post('/register', require('./src/route/register.js'))
+
 server.post('/login', passport.authenticate('local'), (req, res, next) => {
   res.json({
     status: 'success',
