@@ -1,27 +1,16 @@
 const validator = require('validator')
 const User = require('../model/user.js')
 
-module.exports = (req, res, next) => {
+module.exports = function register(req, callback) {
   let username = req.body.username
   let password = req.body.password
   let name = req.body.name
   let age = req.body.age
 
   username = validator.normalizeEmail(username)
-  if (!validator.isEmail(username)) return res.json({
-    status: 'error',
-    message: 'Not a valid email'
-  })
+  if (!validator.isEmail(username)) return callback(username + ' is not a valid email')
 
-  if (!User.findOne({ username: username })) return res.json({
-    status: 'error',
-    message: 'User already exists'
-  })
-
-  if (!validator.isInt(age.toString(), { min: 0, max: 125 })) return res.json({
-    status: 'error',
-    message: 'Invalid age'
-  })
+  if (!validator.isInt(age.toString(), { min: 0, max: 125 })) return callback(age + ' is not a valid age')
 
   let user = {
     username: username,
@@ -30,22 +19,11 @@ module.exports = (req, res, next) => {
     age: age
   }
 
-  new User(user).save((err) => {
+  new User(user).save((err, user) => {
     if (err) {
       console.error(err)
-      return res.json({
-        status: 'error',
-        message: err
-      })
+      return callback(err)
     }
-
-    return res.json({
-      status: 'success',
-      data: {
-        user
-      }
-    })
+    return callback(null, user)
   })
-
-  next()
 }
