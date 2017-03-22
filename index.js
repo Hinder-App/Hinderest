@@ -5,6 +5,7 @@ const sessions = require('client-sessions')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const User = require('./src/model/user.js')
+const register = require('./src/route/register.js')
 
 mongoose.connect(process.env.MONGODB_URI, (err) => {
   if (err) {
@@ -26,16 +27,23 @@ server.use(passport.initialize())
 server.use(passport.session())
 
 passport.use(new LocalStrategy(
-  (username, password, done) => {
+  { passReqToCallback: true },
+  (req, username, password, done) => {
     User.findOne({ username: username }, (err, user) => {
       if (err) {
         console.error(err)
         return done(err)
       }
+
       if (!user) {
-        return done(err, 'User does not exist')
+        register(req, (err, newUser) => {
+          if (err) return done(err)
+          user = newUser
+        })
+        return done(null, user)
       }
-      if (!user.verifyPassword(password)) return done(null, false)
+
+      if (!user.verifyPassword(password)) return done(null, 'Password is incorrect')
       return done(null, user)
     })
   }
@@ -51,15 +59,26 @@ passport.deserializeUser((id, done) => {
   })
 })
 
-server.post('/register', require('./src/route/register.js'))
-
-server.post('/login', passport.authenticate('local'), (req, res, next) => {
-  res.json({
-    status: 'success',
-    data: {
-      message: req.user.username + ' is logged in'
+server.post('/users/:username', passport.authenticate('local'), (req, res, next) => {
+  User.findOne({ username: req.params.username }, (err, user) => {
+    if (err) if (err) {
+      console.error(err)
+      return res.json({
+        status: 'error',
+        message: err
+      })
     }
+
+    res.json({
+      status: 'success',
+      data: {
+        user
+      }
+    })
+
+    req.logout()
   })
+
   next()
 })
 
