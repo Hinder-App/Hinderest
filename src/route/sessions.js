@@ -33,6 +33,7 @@ module.exports = (req, res, next) => {
 
 function addSession(body) {
   let session = {
+    date: body.date,
     shapeGames: body.shapeGames,
     mathGames: body.mathGames,
     memoryGames: body.memoryGames
