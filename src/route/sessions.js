@@ -4,6 +4,7 @@ const Session = require('../model/session.js')
 module.exports = (req, res, next) => {
   let sessionJSON
   let userJSON
+
   addSession(req.body)
     .then((session) => {
       sessionJSON = session
@@ -41,7 +42,5 @@ function addSession(body) {
 }
 
 function addSessionToUser(username, id) {
-  User.findOneAndUpdate({ username: username }, { $push: { sessions: id } }, { new: true }).exec()
-    .then((user) => { return Promise.resolve(user) })
-    .catch((err) => { return Promise.reject(err) })
+  return User.findOneAndUpdate({ username: username }, { $push: { sessions: id } }, { new: true }).exec()
 }
