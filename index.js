@@ -26,7 +26,7 @@ server.use(sessions({
 server.use(passport.initialize())
 server.use(passport.session())
 
-passport.use(new LocalStrategy({ passReqToCallback: true }, require('./src/route/login.js')))
+passport.use(new LocalStrategy({ passReqToCallback: true }, require('./src/route/users.js')))
 
 passport.serializeUser((user, done) => {
   done(null, user._id)
@@ -41,6 +41,8 @@ passport.deserializeUser((id, done) => {
       done(err)
     })
 })
+
+server.post('/users/:username/sessions', require('./src/route/sessions.js'))
 
 server.post('/users/:username', passport.authenticate('local'), (req, res, next) => {
   User.findOne({ username: req.params.username }).exec()
