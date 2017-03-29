@@ -5,7 +5,8 @@ let User = new Schema({
   username: String,
   password: String,
   name: String,
-  age: Number
+  age: Number,
+  sessions: [String]
 })
 
 User.methods.verifyPassword = function (password) {
