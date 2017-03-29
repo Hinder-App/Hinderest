@@ -12,6 +12,7 @@ let MemoryGameSchema = new Schema({
 })
 
 let Session = new Schema({
+  date: { type: Date, default: Date.now },
   shapeGames: [GameSchema],
   mathGames: [GameSchema],
   memoryGames: [MemoryGameSchema]
