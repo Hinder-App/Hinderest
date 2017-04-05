@@ -34,9 +34,18 @@ module.exports = (req, res, next) => {
 function addSession(body) {
   let session = {
     date: body.date,
-    shapeGames: body.shapeGames,
-    mathGames: body.mathGames,
-    memoryGames: body.memoryGames
+    shapeGames: {
+      score: calculateScore(body.shapeGames),
+      results: body.shapeGames
+    },
+    mathGames: {
+      score: calculateScore(body.mathGames),
+      results: body.mathGames
+    },
+    memoryGames: {
+      score: calculateScore(body.memoryGames, true),
+      results: body.memoryGames
+    }
   }
 
   return new Session(session).save()
@@ -44,4 +53,20 @@ function addSession(body) {
 
 function addSessionToUser(username, id) {
   return User.findOneAndUpdate({ username: username }, { $push: { sessions: id } }, { new: true }).exec()
+}
+
+function calculateScore(games, isMemoryGame) {
+  let score
+
+  if (isMemoryGame) {
+    score = games.reduce((acc, result) => {
+      return acc + result.correct / result.finishTime * 10000000
+    }, 0) / games.length
+  } else {
+    score = games.reduce((acc, result) => {
+      return acc + Math.round(result.correct / result.total * 10000)
+    }, 0) / games.length
+  }
+
+  return Math.round(score)
 }
