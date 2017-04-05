@@ -3,19 +3,30 @@ const Schema = mongoose.Schema
 
 let GameSchema = new Schema({
   _id: false,
-  result: { correct: Number, total: Number }
+  correct: Number,
+  total: Number
 })
 
 let MemoryGameSchema = new Schema({
   _id: false,
-  result: { correct: Number, finishTime: Number }
+  correct: Number,
+  finishTime: Number
 })
 
 let Session = new Schema({
   date: { type: Date, default: Date.now },
-  shapeGames: [GameSchema],
-  mathGames: [GameSchema],
-  memoryGames: [MemoryGameSchema]
+  shapeGames: {
+    score: Number,
+    results: [GameSchema]
+  },
+  mathGames: {
+    score: Number,
+    results: [GameSchema]
+  },
+  memoryGames: {
+    score: Number,
+    results: [MemoryGameSchema]
+  }
 })
 
 module.exports = mongoose.model('Session', Session)
