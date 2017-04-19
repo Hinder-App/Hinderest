@@ -60,7 +60,7 @@ function calculateScore(games, isMemoryGame) {
 
   if (isMemoryGame) {
     score = games.reduce((acc, result) => {
-      return acc + result.correct / result.finishTime * 10000000
+      return acc + Math.round(result.correct / result.finishTime * 10000000)
     }, 0) / games.length
   } else {
     score = games.reduce((acc, result) => {
