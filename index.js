@@ -6,6 +6,7 @@ mongoose.Promise = global.Promise
 const sessions = require('client-sessions')
 const passport = require('passport')
 const Router = require('./src/route/router.js')
+const Aggregator = require('./src/aggregator/aggregator.js')
 
 mongoose.connect(process.env.MONGODB_URI, (err) => {
   if (err) {
@@ -29,4 +30,5 @@ server.use(passport.session())
 server.listen(process.env.PORT, (err) => {
   if (err) console.error(err)
   Router.init(server)
+  Aggregator.pollScores()
 })

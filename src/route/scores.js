@@ -3,12 +3,9 @@ const Session = require('../model/session.js')
 
 module.exports = (req, res, next) => {
   User.findOne({ username: req.params.username }).sort({ date: 'desc' }).exec()
-    .then((user) => {
-      return getSessions(user.sessions, req.params.number)
-    })
-    .then((sessions) => {
-      return calculateScores(sessions)
-    })
+    .then(user => getSessions(user.sessions, req.params.number))
+    .then(sessions => calculateScores(sessions))
+    .then(scores => getStandings(scores))
     .then((scores) => {
       return res.json({
         status: 'success',
@@ -52,4 +49,10 @@ function calculateScores(sessions) {
     mathScores: mathScores,
     memoryScores: memoryScores
   }
+}
+
+function getStandings() {
+  let averageScores = require('../aggregator/aggregator.js').averageScores
+
+  if ()
 }
