@@ -35,7 +35,6 @@ function getSessions(sessions, number) {
 }
 
 function calculateScores(sessions) {
-  let scores = []
   let shapeScores = []
   let mathScores = []
   let memoryScores = []
@@ -46,13 +45,11 @@ function calculateScores(sessions) {
     shapeScores.push({ date: date, score: session.shapeGames.score })
     mathScores.push({ date: date, score: session.mathGames.score })
     memoryScores.push({ date: date, score: session.memoryGames.score })
-
-    scores = {
-      shapeScores: shapeScores,
-      mathScores: mathScores,
-      memoryScores: memoryScores
-    }
   })
 
-  return Promise.resolve(scores)
+  return {
+    shapeScores: shapeScores,
+    mathScores: mathScores,
+    memoryScores: memoryScores
+  }
 }
