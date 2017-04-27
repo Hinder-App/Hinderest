@@ -32,9 +32,9 @@ module.exports = (req, res, next) => {
 function addSession(games) {
   let session = {
     date: games.date,
-    shapeGames: {
-      score: calculateScores(games.shapeGames),
-      results: games.shapeGames
+    colorGames: {
+      score: calculateScores(games.colorGames),
+      results: games.colorGames
     },
     mathGames: {
       score: calculateScores(games.mathGames),
