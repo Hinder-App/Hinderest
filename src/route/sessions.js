@@ -66,7 +66,7 @@ function calculateScores(games, isMemoryGame) {
     }, 0) / games.length
   }
 
-  if (!score) return Promise.reject('Finish Time and Total must be an int and cannot be 0')
+  if (isNaN(score)) return Promise.reject('Finish Time and Total must be an int and cannot be 0')
   return score
 }
 
