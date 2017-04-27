@@ -35,20 +35,20 @@ function getSessions(sessions, number) {
 }
 
 function calculateScores(sessions) {
-  let shapeScores = []
+  let colorScores = []
   let mathScores = []
   let memoryScores = []
 
   sessions.forEach((session) => {
     let date = session.date
 
-    shapeScores.push({ date: date, score: session.shapeGames.score })
+    colorScores.push({ date: date, score: session.colorGames.score })
     mathScores.push({ date: date, score: session.mathGames.score })
     memoryScores.push({ date: date, score: session.memoryGames.score })
   })
 
   return {
-    shapeScores: shapeScores,
+    colorScores: colorScores,
     mathScores: mathScores,
     memoryScores: memoryScores
   }
