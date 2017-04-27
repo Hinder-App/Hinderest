@@ -54,22 +54,25 @@ function addSessionToUser(username, id) {
 }
 
 function calculateScores(games, isMemoryGame) {
+  const MEMORY_GAME_MULTIPLIER = 10000000
+  const GAME_MULTIPLIER = 10000
+  const START_OF_ARRAY = 0
   let score
 
   if (isMemoryGame) {
     score = games.reduce((acc, result) => {
-      return acc + calculateScore(result.correct, result.finishTime, 10000000)
-    }, 0) / games.length
+      return calculateScore(acc, result.correct, result.finishTime, MEMORY_GAME_MULTIPLIER)
+    }, START_OF_ARRAY) / games.length
   } else {
     score = games.reduce((acc, result) => {
-      return acc + calculateScore(result.correct, result.total, 10000)
-    }, 0) / games.length
+      return calculateScore(acc, result.correct, result.total, GAME_MULTIPLIER)
+    }, START_OF_ARRAY) / games.length
   }
 
   if (isNaN(score)) return Promise.reject('Finish Time and Total must be an int and cannot be 0')
   return score
 }
 
-function calculateScore(correct, total, multiplier) {
-  return Math.round((correct / total) * multiplier)
+function calculateScore(acc, correct, total, multiplier) {
+  return acc + Math.round((correct / total) * multiplier)
 }
