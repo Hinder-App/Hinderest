@@ -5,7 +5,6 @@ module.exports = (req, res, next) => {
   User.findOne({ username: req.params.username }).sort({ date: 'desc' }).exec()
     .then(user => getSessions(user.sessions, req.params.number))
     .then(sessions => calculateScores(sessions))
-    .then(scores => getStandings(scores))
     .then((scores) => {
       return res.json({
         status: 'success',
@@ -32,6 +31,7 @@ function getSessions(sessions, number) {
 }
 
 function calculateScores(sessions) {
+  let averageScores = require('../aggregator/aggregator.js').averageScores
   let colorScores = []
   let mathScores = []
   let memoryScores = []
@@ -39,9 +39,9 @@ function calculateScores(sessions) {
   sessions.forEach((session) => {
     let date = session.date
 
-    colorScores.push({ date: date, score: session.colorGames.score })
-    mathScores.push({ date: date, score: session.mathGames.score })
-    memoryScores.push({ date: date, score: session.memoryGames.score })
+    colorScores.push({ date: date, score: session.colorGames.score, analysis: delta(averageScores.colorTotal, session.colorGames.score) })
+    mathScores.push({ date: date, score: session.mathGames.score, analysis: delta(averageScores.mathTotal, session.colorGames.score) })
+    memoryScores.push({ date: date, score: session.memoryGames.score, analysis: delta(averageScores.memoryTotal, session.colorGames.score) })
   })
 
   return {
@@ -51,8 +51,14 @@ function calculateScores(sessions) {
   }
 }
 
-function getStandings() {
-  let averageScores = require('../aggregator/aggregator.js').averageScores
+function delta(averageScore, score) {
+  let dividend = averageScore / score
 
-  if ()
+  if (dividend >= 0.85 && dividend <= 1.15) {
+    return 'Average'
+  } else if (dividend < 0.85) {
+    return 'Below Average'
+  } else if (dividend > 1.15) {
+    return 'Above Average'
+  }
 }

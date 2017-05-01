@@ -1,4 +1,5 @@
 const Session = require('../model/session.js')
+const HOUR_IN_MS = 3600000
 
 exports.pollScores = pollScores
 
@@ -7,12 +8,12 @@ function pollScores() {
     .then(sessions => calculateAverages(sessions))
     .then(scores => updateAverages(scores))
     .catch(err => console.error(err))
-  return setTimeout(pollScores, 5000)
+  return setTimeout(pollScores, HOUR_IN_MS)
 }
 
 function calculateAverages(sessions) {
   let initialObject = {
-    shapeTotal: 0,
+    colorTotal: 0,
     mathTotal: 0,
     memoryTotal: 0
   }
@@ -31,7 +32,7 @@ function updateAverages(scores) {
 
 function total(acc, session) {
   return {
-    shapeTotal: acc.shapeTotal + session.shapeGames.score,
+    colorTotal: acc.colorTotal + session.colorGames.score,
     mathTotal: acc.mathTotal + session.mathGames.score,
     memoryTotal: acc.memoryTotal + session.memoryGames.score
   }
