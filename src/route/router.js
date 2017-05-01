@@ -8,7 +8,7 @@ const handler = {
 }
 
 exports.init = (server) => {
-  passport.use(new LocalStrategy({ passReqToCallback: true }, handler.users.handle))
+  passport.use(new LocalStrategy({ passReqToCallback: true }, handler.users.login))
   passport.serializeUser((user, done) => { done(null, user._id) })
   passport.deserializeUser((id, done) => {
     User.findById(id).exec()
@@ -20,6 +20,7 @@ exports.init = (server) => {
   server.get('/users/:username/scores', handler.scores)
   server.post('/users/:username/sessions', handler.sessions)
   server.post('/users/:username', passport.authenticate('local'), handler.users.respond)
+  server.put('/users/:username', handler.users.update)
 
   console.log(`${server.name} is listening at ${server.url}`)
 }
