@@ -16,9 +16,13 @@ exports.init = (server) => {
       .catch(err => done(err))
   })
 
+
   server.get('/users/:username/scores/:number', handler.scores)
   server.get('/users/:username/scores', handler.scores)
+
   server.post('/users/:username/sessions', handler.sessions)
+
+  server.get('/users/:username', handler.users.get)
   server.post('/users/:username', passport.authenticate('local'), handler.users.respond)
   server.put('/users/:username', handler.users.update)
 
