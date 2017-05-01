@@ -1,6 +1,21 @@
 const validator = require('validator')
 const User = require('../model/user.js')
 
+exports.get = (req, res, next) => {
+  User.findOne({ username: req.params.username }).exec()
+    .then(user => exists(user))
+    .then(user => res.json({ status: 'success', data: user }))
+    .catch((err) => {
+      console.error(err)
+      return res.json({
+        status: 'error',
+        message: err
+      })
+    })
+
+  next()
+}
+
 exports.login = (req, username, password, done) => {
   User.findOne({ username: username }).exec()
     .then((user) => {
