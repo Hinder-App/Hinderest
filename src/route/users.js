@@ -1,7 +1,7 @@
 const validator = require('validator')
 const User = require('../model/user.js')
 
-module.exports = (req, username, password, done) => {
+exports.handle = (req, username, password, done) => {
   User.findOne({ username: username }).exec()
     .then((user) => {
       if (!user) return register(req)
@@ -15,6 +15,25 @@ module.exports = (req, username, password, done) => {
       console.error(err)
       return done(err)
     })
+}
+
+exports.respond = (req, res, next) => {
+  User.findOne({ username: req.params.username }).exec()
+    .then((user) => {
+      return res.json({
+        status: 'success',
+        data: { user }
+      })
+    })
+    .catch((err) => {
+      console.error(err)
+      return res.json({
+        status: 'error',
+        message: err
+      })
+    })
+
+  next()
 }
 
 function register(req) {
