@@ -1,5 +1,6 @@
 require('dotenv').load()
 const restify = require('restify')
+const crypto = require('crypto')
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 const sessions = require('client-sessions')
@@ -18,8 +19,8 @@ const server = restify.createServer({ name: 'Hinderest' })
 server.use(restify.queryParser())
 server.use(restify.bodyParser())
 server.use(sessions({
-  cookieName: 'session',
-  secret: 'lol',
+  cookieName: 'hinderest',
+  secret: crypto.randomBytes(256),
   duration: 182 * 24 * 60 * 60 * 1000
 }))
 server.use(passport.initialize())
