@@ -1,6 +1,6 @@
 {
   "name": "Hinderest",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "REST API for Hinder",
   "main": "index.js",
   "repository": "git@github.com:Hinder-App/Hinderest.git",
